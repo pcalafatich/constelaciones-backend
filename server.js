@@ -16,55 +16,8 @@ const { createToken, hashPassword, verifyPassword } = require('./util');
 
 const app = express();
 
- //Configurar cabeceras y cors
-//  app.use((req, res, next) => {
-//    res.header('Access-Control-Allow-Origin', '*');
-//    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-//    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-//    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-//    next();
-//  });
-
-
-var dominiosHabilitados = ['https://claudiapedrosa.com', 'http://claudiapedrosa.com', 'http://localhost:3000'];
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
- 
-    if (dominiosHabilitados.indexOf(origin) === -1) {
-      var msg = `Este sitio ${origin} no tiene permisos de acceso. Solo los dominios especificados tiene permiso para acceder.`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  }
-}));
-
-
-
 const server = require('http').createServer(app);
-// const io = require('socket.io').listen(server);
-
-// const io = require('socket.io')(server, {
-//   origins: ["http//localhost:3000"]
-// });
-
-// const io = require('socket.io')(server, {
-//   origins: ['https://claudiapedrosa.com']
-// });
-
-
-
-const io = require("socket.io")(server, {
-  handlePreflightRequest: (req, res) => {
-      const headers = {
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-          "Access-Control-Allow-Origin": req.headers.Origin, //or the specific Origin you want to give access to,
-          "Access-Control-Allow-Credentials": true
-      };
-      res.writeHead(200, headers);
-      res.end();
-  }
-});
+const io = require("socket.io")(server);
 
 
 app.use(bodyParser.json())
@@ -80,20 +33,13 @@ io.on('connection', client => {
 const PORT = process.env.PORT || 5000
 
 console.log("Server iniciado");
-// Settings
-//app.set("pkg", pkg);
-//app.set("port", PORT);
-//app.set("json spaces", 4);
+
 
 
 // Welcome Routes
 app.get("/", (req, res) => {
   res.json({
     message: "Constelaciones Mini API",
-    // name: app.get("pkg").name,
-    // version: app.get("pkg").version,
-    // description: app.get("pkg").description,
-    // author: app.get("pkg").author,
   });
 });
 
