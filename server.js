@@ -43,6 +43,19 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get('/favicon.ico', (req, res) => {
+  res.json({
+    message: "Favicon",
+  });
+});
+
+app.get('/prueba', (req, res) => {
+  res.json({
+    message: "Esto es una prueba",
+  });
+});
+
+
 
 app.post('/api/authenticate', async (req, res) => {
   try {
