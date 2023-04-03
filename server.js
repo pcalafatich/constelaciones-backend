@@ -17,7 +17,7 @@ const { createToken, hashPassword, verifyPassword } = require('./util');
 const app = express();
 
 const server = require('http').createServer(app);
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {cors: {origin: "*"}});
 
 
 app.use(bodyParser.json())
